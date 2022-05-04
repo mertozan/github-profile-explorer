@@ -3,14 +3,24 @@ const APIURL = "https://api.github.com/users/";
 const main = document.getElementById("main");
 const form = document.getElementById("form");
 const search = document.getElementById("search");
+let error = null;
 
 async function getUser(username) {
-  const resp = await fetch(APIURL + username);
-  const respData = await resp.json();
+  try {
+    const resp = await fetch(APIURL + username);
+    const respData = await resp.json();
+    console.log(respData);
+    if (respData.message) {
+      error = respData.message;
+    }
+    createUserCard(respData);
 
-  createUserCard(respData);
-
-  getRepos(username);
+    getRepos(username);
+    error = null;
+  } catch (err) {
+    console.log("Hello");
+    error = true;
+  }
 }
 
 async function getRepos(username) {
@@ -21,14 +31,18 @@ async function getRepos(username) {
 }
 
 function createUserCard(user) {
-  const cardHTML = `
+  const cardHTML = error
+    ? `<div style ="color:white;">Not Found</div>`
+    : `
         <div class="card">
             <div>
-                <img class="avatar" src="${user.avatar_url}" alt="${user.name}" />
+                <img class="avatar" src="${user.avatar_url}" alt="${
+        user.name
+      }" />
             </div>
             <div class="user-info">
                 <h2>${user.name}</h2>
-                <p>${user.bio}</p>
+                <p>${user.bio ? user.bio : ""}</p>
                 <ul class="info">
                     <li>${user.followers}<strong>Followers</strong></li>
                     <li>${user.following}<strong>Following</strong></li>
