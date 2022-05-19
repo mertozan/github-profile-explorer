@@ -1,4 +1,4 @@
-const APIURL = "https://api.github.com/users/";
+const APIURL = "https://api.github.com/users/"; 
 
 const main = document.getElementById("main");
 const form = document.getElementById("form");
@@ -7,7 +7,7 @@ let error = null;
 
 async function getUser(username) {
   try {
-    const resp = await fetch(APIURL + username);
+    const resp = await fetch(APIURL + username);    // github kullanıcı bilgilerini çeker
     const respData = await resp.json();
     console.log(respData);
     if (respData.message) {
@@ -15,7 +15,7 @@ async function getUser(username) {
     }
     createUserCard(respData);
 
-    getRepos(username);
+    getRepos(username);   // kullanıcıların repolarını çekiyor
     error = null;
   } catch (err) {
     console.log("Hello");
@@ -23,14 +23,14 @@ async function getUser(username) {
   }
 }
 
-async function getRepos(username) {
+async function getRepos(username) {       // kullanıcıların repolarını çekiyor
   const resp = await fetch(APIURL + username + "/repos");
   const respData = await resp.json();
 
   addReposToCard(respData);
 }
 
-function createUserCard(user) {
+function createUserCard(user) {       // Bilgileri basıyor
   const cardHTML = error
     ? `<div style ="color:white;">Not Found</div>`
     : `
@@ -74,7 +74,7 @@ function addReposToCard(repos) {
     });
 }
 
-form.addEventListener("submit", (e) => {
+form.addEventListener("submit", (e) => {      // inputa girilen değeri getUser fonksiyonuna gönderiyor
   e.preventDefault();
 
   const user = search.value;
